@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Blog.Api.Domain.csproj" />
     <ProjectReference Include="..\Blog.Api.Domain\Blog.Api.Domain.csproj" />
   </ItemGroup>
 

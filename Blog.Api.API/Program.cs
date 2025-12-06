@@ -1,10 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Blog.Api.Authentication.Entities;
 using Blog.Api.Authentication.Context; // Para AuthDbContext
 using Blog.Api.Infrastructure.Context; // Para BlogDbContext
-using Microsoft.AspNetCore.Authentication.JwtBearer; // Para JwtBearerDefaults
-using Microsoft.IdentityModel.Tokens;               // Para TokenValidationParameters, SymmetricSecurityKey
-using System.Text;                                  // Para Encoding
+using Blog.Api.Authentication.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -13,35 +16,38 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 // 1. Configuração dos Serviços (Injeção de Dependência)
 // ==========================================================
 
-// Adiciona os Controllers (necessário para a API Web padrão)
+// Controllers
 builder.Services.AddControllers();
 
-// 1.1. Configuração do AuthDbContext (Identity)
+// AuthDbContext
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseNpgsql(connectionString,
         b => b.MigrationsAssembly(typeof(AuthDbContext).Assembly.FullName)));
 
-// 1.2. Configuração do BlogDbContext (Domínio/Infraestrutura)
+// BlogDbContext
 builder.Services.AddDbContext<BlogDbContext>(options =>
     options.UseNpgsql(connectionString,
         b => b.MigrationsAssembly(typeof(BlogDbContext).Assembly.FullName)));
 
-// 1.3. Configuração do ASP.NET Core Identity
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+// ASP.NET Core Identity (ApplicationUser)
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    // Configurações de senha para desenvolvimento/teste
     options.Password.RequireDigit = false;
     options.Password.RequireLowercase = false;
     options.Password.RequireUppercase = false;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 6;
 })
-.AddEntityFrameworkStores<AuthDbContext>() // Usa o AuthDbContext para persistência
+.AddEntityFrameworkStores<AuthDbContext>()
 .AddDefaultTokenProviders();
 
-// 1.4. Configuração do JWT Bearer
+// ----------------------------------------------------------
+// JWT
+// ----------------------------------------------------------
+// Lê a seção JwtSettings (mesma que no appsettings.json)
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]!);
+var keyString = jwtSettings["Key"] ?? throw new Exception("JwtSettings:Key não encontrada no configuration.");
+var key = Encoding.UTF8.GetBytes(keyString);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -50,34 +56,41 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = false; // Mudar para true em produção
+    options.RequireHttpsMetadata = false; // true em prod
     options.SaveToken = true;
+
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
+
         ValidateIssuer = true,
         ValidIssuer = jwtSettings["Issuer"],
+
         ValidateAudience = true,
         ValidAudience = jwtSettings["Audience"],
+
         ValidateLifetime = true,
         ClockSkew = TimeSpan.Zero
     };
 });
 
+// MediatR
+builder.Services.AddMediatR(typeof(Blog.Api.Authentication.Handlers.LoginUsuarioHandler).Assembly);
 
-// Configuração do Swagger/OpenAPI
+// Serviços
+builder.Services.AddScoped<JwtTokenService>();
+
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// ==========================================================
+// 2. Pipeline
+// ==========================================================
 
 var app = builder.Build();
 
-// ==========================================================
-// 2. Configuração do Pipeline (Middleware)
-// ==========================================================
-
-// Configurar o pipeline de requisição HTTP.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -85,42 +98,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-// Adicionar Autenticação e Autorização (Deve vir antes do MapControllers)
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Mapeia os controllers que foram adicionados (sua API REST)
 app.MapControllers();
-
-// Remove a rota de exemplo WeatherForecast (opcional, mas limpa o projeto)
-/*
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-*/
-
 app.Run();
-
-// Remove o record de exemplo
-/*
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
-*/
