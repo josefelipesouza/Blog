@@ -1,6 +1,22 @@
-version: '3.8'
+
 
 services:
+  # ---------------------------------------------
+  # NOVO: Serviço da sua API .NET
+  blogapi: # <-- NOME DO SERVIÇO (Vamos usar este nome abaixo!)
+    build:
+      context: . # Assumindo que o Dockerfile está na raiz
+      dockerfile: Dockerfile # Ajuste o caminho para o seu Dockerfile
+    ports:
+      - "8080:8080" # Porta para acessar a API
+    depends_on:
+      - db # Depende do banco de dados estar rodando
+    environment:
+      # Garante que a connection string na API aponte para o nome do serviço 'db'
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=blogdb;Username=devuser;Password=devpassword 
+  # ---------------------------------------------
+      
   db:
     image: postgres:16-alpine
     container_name: blog-postgres-db

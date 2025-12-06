@@ -1,0 +1,5 @@
+C:\app\publish\Blog.Api.Application.dll
+C:\app\publish\Blog.Api.Application.deps.json
+C:\app\publish\Blog.Api.Application.pdb
+C:\app\publish\Blog.Api.Domain.dll
+C:\app\publish\Blog.Api.Domain.pdb

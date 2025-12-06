@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 // O IdentityDbContext usa a tabela de IdentityUser (padrão)
+namespace Blog.Api.Authentication.Context;
 public class AuthDbContext : IdentityDbContext<IdentityUser>
 {
     public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)

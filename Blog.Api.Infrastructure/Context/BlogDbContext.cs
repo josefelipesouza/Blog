@@ -2,6 +2,7 @@
 using Blog.Api.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
+namespace Blog.Api.Infrastructure.Context;
 public class BlogDbContext : DbContext
 {
     public BlogDbContext(DbContextOptions<BlogDbContext> options) : base(options)
