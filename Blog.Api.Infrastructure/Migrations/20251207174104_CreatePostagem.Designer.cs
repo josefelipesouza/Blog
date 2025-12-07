@@ -3,6 +3,7 @@ using System;
 using Blog.Api.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Blog.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    partial class BlogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251207174104_CreatePostagem")]
+    partial class CreatePostagem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,9 +31,6 @@ namespace Blog.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("AtualizadoEm")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("AutorId")
                         .IsRequired()
                         .HasColumnType("text");
@@ -41,12 +41,6 @@ namespace Blog.Api.Infrastructure.Migrations
 
                     b.Property<DateTime>("DataCriacao")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("IdUsuarioAlteracao")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("Inativo")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Titulo")
                         .IsRequired()

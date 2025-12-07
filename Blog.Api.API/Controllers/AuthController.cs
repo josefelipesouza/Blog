@@ -1,7 +1,9 @@
 using Blog.Api.Authentication.Requests.Register;
 using Blog.Api.Authentication.Requests.Login;
+using Blog.Api.Authentication.Requests.Logout;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Blog.Api.API.Controllers
 {
@@ -26,6 +28,20 @@ namespace Blog.Api.API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginUserRequest request)
         {
             return Ok(await _mediator.Send(request));
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value ?? "";
+
+            var response = await _mediator.Send(new LogoutUserRequest
+            {
+                UserId = userId
+            });
+
+            return Ok(response);
         }
     }
 }
