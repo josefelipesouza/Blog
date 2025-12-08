@@ -47,6 +47,7 @@ public class EditarPostagemHandler
 
         postagem.Titulo = request.Titulo;
         postagem.Conteudo = request.Conteudo;
+        postagem.AtualizadoEm = DateTime.UtcNow;
 
         _repo.Atualizar(postagem);
         await _repo.UnitOfWork.CommitAsync(cancellationToken);
@@ -55,7 +56,8 @@ public class EditarPostagemHandler
             postagem.Id,
             postagem.Titulo,
             postagem.Conteudo,
-            postagem.DataCriacao
+            postagem.DataCriacao,
+            postagem.AtualizadoEm
         );
     }
 }

@@ -84,7 +84,6 @@ builder.Services.AddAuthentication(options =>
 });
 
 // MediatR
-// MediatR
 builder.Services.AddMediatR(
     typeof(Program).Assembly,
     typeof(RegisterUserRequest).Assembly,

@@ -29,8 +29,12 @@ public class PostagemRepository : IPostagemRepository
 
     public async Task<IEnumerable<Postagem>> ListarAsync(CancellationToken cancellationToken)
     {
-        return await _context.Postagens.AsNoTracking().ToListAsync(cancellationToken);
+        return await _context.Postagens
+            .AsNoTracking()
+            .OrderByDescending(p => p.DataCriacao)
+            .ToListAsync(cancellationToken);
     }
+
 
     public void Atualizar(Postagem postagem)
     {
