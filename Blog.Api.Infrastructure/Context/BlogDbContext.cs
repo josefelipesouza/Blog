@@ -1,20 +1,26 @@
-// Em Blog.Api.Infrastructure/Context/BlogDbContext.cs
+using Blog.Api.Application.Interfaces.Data;
 using Blog.Api.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Blog.Api.Infrastructure.Context;
-public class BlogDbContext : DbContext
+namespace Blog.Api.Infrastructure.Context
 {
-    public BlogDbContext(DbContextOptions<BlogDbContext> options) : base(options)
+    public class BlogDbContext : DbContext, IUnityOfWork
     {
-    }
+        public BlogDbContext(DbContextOptions<BlogDbContext> options) 
+            : base(options)
+        {
+        }
 
-    // Tabela de Postagens
-    public DbSet<Postagem> Postagens { get; set; } = default!;
+        public DbSet<Postagem> Postagens { get; set; } = default!;
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
-        // Configurações de mapeamento de entidades podem vir aqui (EntityConfig).
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
+
+        public async Task CommitAsync(CancellationToken cancellationToken = default)
+        {
+            await SaveChangesAsync(cancellationToken);
+        }
     }
 }

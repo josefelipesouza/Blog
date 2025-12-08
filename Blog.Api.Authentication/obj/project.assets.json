@@ -1070,6 +1070,10 @@
       "Blog.Api.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "MediatR": "11.1.0",
+          "MediatR.Extensions.Microsoft.DependencyInjection": "11.1.0"
+        },
         "compile": {
           "bin/placeholder/Blog.Api.Domain.dll": {}
         },

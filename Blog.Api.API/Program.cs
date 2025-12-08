@@ -8,6 +8,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using MediatR;
+using Blog.Api.Authentication.Requests.Register;
+using Blog.Api.Application.Handlers.Post.Cadastrar;
+using Blog.Api.Application.Handlers.Post.Editar;
+using Blog.Api.Application.Handlers.Post.Excluir;
+using Blog.Api.Application.Handlers.Post.Listar;
+using Blog.Api.Application.Interfaces.Repositories;
+using Blog.Api.Infrastructure.Repositories;
+using Blog.Api.Application.Interfaces.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -76,10 +84,22 @@ builder.Services.AddAuthentication(options =>
 });
 
 // MediatR
-builder.Services.AddMediatR(typeof(Blog.Api.Authentication.Handlers.LoginUsuarioHandler).Assembly);
+// MediatR
+builder.Services.AddMediatR(
+    typeof(Program).Assembly,
+    typeof(RegisterUserRequest).Assembly,
+    typeof(CadastrarPostagemHandler).Assembly,
+    typeof(EditarPostagemHandler).Assembly,
+    typeof(ExcluirPostagemHandler).Assembly,
+    typeof(ListarPostagensHandler).Assembly
+);
 
 // Serviços
 builder.Services.AddScoped<JwtTokenService>();
+
+builder.Services.AddScoped<IPostagemRepository, PostagemRepository>();
+builder.Services.AddScoped<IUnityOfWork, BlogDbContext>();
+
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();

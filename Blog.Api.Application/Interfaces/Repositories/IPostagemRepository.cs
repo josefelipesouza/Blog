@@ -1,4 +1,5 @@
 // Blog.Api.Application/Interfaces/Repositories/IPostagemRepository.cs
+using Blog.Api.Application.Interfaces.Data;
 using Blog.Api.Domain.Entities;
 
 namespace Blog.Api.Application.Interfaces.Repositories;

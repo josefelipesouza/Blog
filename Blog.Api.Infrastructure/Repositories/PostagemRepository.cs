@@ -9,6 +9,7 @@ namespace Blog.Api.Infrastructure.Repositories;
 public class PostagemRepository : IPostagemRepository
 {
     public IUnityOfWork UnitOfWork => _context;
+
     private readonly BlogDbContext _context;
 
     public PostagemRepository(BlogDbContext context)
