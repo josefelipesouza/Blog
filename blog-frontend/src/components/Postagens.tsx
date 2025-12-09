@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
-import { Postagem } from '../types';
+import type { Postagem } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 
 export const PostagensList: React.FC = () => {

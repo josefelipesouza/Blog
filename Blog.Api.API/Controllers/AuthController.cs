@@ -4,6 +4,7 @@ using Blog.Api.Authentication.Requests.Logout;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Blog.Api.Application.Handlers.User.Listar;
 
 namespace Blog.Api.API.Controllers
 {
@@ -42,6 +43,19 @@ namespace Blog.Api.API.Controllers
             });
 
             return Ok(response);
+        }
+
+        [HttpGet("users")]
+        [Authorize(Roles = "Admin")] // Protege o endpoint
+        public async Task<IActionResult> ListarUsuarios()
+        {
+            var result = await _mediator.Send(new ListarUsuariosRequest());
+
+            return result.Match(
+                sucesso => Ok(sucesso),
+                // Se falhar, pode ser um erro de permissão (403 Forbidden) ou outro erro
+                erros => Problem(statusCode: 400, detail: erros.First().Description)
+            );
         }
     }
 }

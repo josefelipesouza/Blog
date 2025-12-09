@@ -1,22 +1,9 @@
-
+version: '3.8'
 
 services:
   # ---------------------------------------------
-  # NOVO: Serviço da sua API .NET
-  blogapi: # <-- NOME DO SERVIÇO (Vamos usar este nome abaixo!)
-    build:
-      context: . # Assumindo que o Dockerfile está na raiz
-      dockerfile: Dockerfile # Ajuste o caminho para o seu Dockerfile
-    ports:
-      - "8080:8080" # Porta para acessar a API
-    depends_on:
-      - db # Depende do banco de dados estar rodando
-    environment:
-      # Garante que a connection string na API aponte para o nome do serviço 'db'
-      ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=blogdb;Username=devuser;Password=devpassword 
+  # 1. Serviço do Banco de Dados PostgreSQL (DB)
   # ---------------------------------------------
-      
   db:
     image: postgres:16-alpine
     container_name: blog-postgres-db
@@ -30,5 +17,52 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  # ---------------------------------------------
+  # 2. Serviço do Backend .NET (blogapi)
+  # ---------------------------------------------
+  blogapi:
+    build:
+      # Contexto: Onde o docker-compose.yml está (assumimos que o Dockerfile do .NET está aqui)
+      context: . 
+      dockerfile: Dockerfile 
+    container_name: blog-api-container
+    ports:
+      # Mapeia a porta 8080 interna do container .NET para a porta 5000 externa
+      - "5000:8080" 
+    depends_on:
+      - db
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      # A conexão usa o nome do serviço 'db' como Host
+      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=blogdb;Username=devuser;Password=devpassword
+      ASPNETCORE_URLS: http://+:8080
+
+  # ---------------------------------------------
+  # 3. Serviço do Frontend React (blogfrontend)
+  # ---------------------------------------------
+  blogfrontend:
+    build:
+      # Contexto: Aponta para a pasta do frontend
+      context: ./blog-frontend 
+      dockerfile: Dockerfile.frontend # Usa o Dockerfile específico para o frontend
+    container_name: blog-frontend-container
+    ports:
+      # Mapeia a porta 5173 interna do Vite para a porta 5173 externa
+      - "5173:5173" 
+    volumes:
+      # Monta o código-fonte para hot-reload e desenvolvimento
+      - ./blog-frontend:/app 
+      # Garante que a pasta node_modules seja gerenciada pelo container
+      - /app/node_modules 
+    environment:
+      # Essencial para o hot-reload do Vite funcionar no Docker
+      - CHOKIDAR_USEPOLLING=true 
+      # Variável de ambiente no frontend para apontar para o backend
+      - VITE_API_URL=http://blogapi:8080/api 
+    # Comando para rodar o servidor de desenvolvimento Vite
+    command: npm run dev 
+    depends_on:
+      - blogapi # Depende do backend para comunicação
+    
 volumes:
   postgres_data:

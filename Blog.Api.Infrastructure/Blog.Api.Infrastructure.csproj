@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Blog.Api.Application\Blog.Api.Application.csproj" />
     <ProjectReference Include="..\Blog.Api.Domain\Blog.Api.Domain.csproj" />
+    <ProjectReference Include="..\Blog.Api.Authentication\Blog.Api.Authentication.csproj" />
   </ItemGroup>
 
   <ItemGroup>

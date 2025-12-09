@@ -1,0 +1,18 @@
+# Usa uma imagem Node.js recente (LTS)
+FROM node:20.19.6-alpine 
+
+# Define o diretório de trabalho dentro do container
+WORKDIR /app
+
+# Copia os arquivos de dependência e instala
+COPY package*.json ./
+RUN npm install
+
+# Copia o restante do código
+COPY . .
+
+# Expõe a porta padrão do Vite
+EXPOSE 5173
+
+# O CMD é substituído pelo comando 'npm run dev' no docker-compose.yml para desenvolvimento
+# CMD ["npm", "run", "dev"]

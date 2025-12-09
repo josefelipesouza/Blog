@@ -873,6 +873,7 @@
       "Blog.Api.Infrastructure/1.0.0": {
         "dependencies": {
           "Blog.Api.Application": "1.0.0",
+          "Blog.Api.Authentication": "1.0.0",
           "Blog.Api.Domain": "1.0.0",
           "MediatR": "11.1.0",
           "MediatR.Extensions.Microsoft.DependencyInjection": "11.1.0",

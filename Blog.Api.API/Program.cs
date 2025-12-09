@@ -16,6 +16,8 @@ using Blog.Api.Application.Handlers.Post.Listar;
 using Blog.Api.Application.Interfaces.Repositories;
 using Blog.Api.Infrastructure.Repositories;
 using Blog.Api.Application.Interfaces.Data;
+using Blog.Api.Application.Interfaces.Services;
+using Blog.Api.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -98,6 +100,8 @@ builder.Services.AddScoped<JwtTokenService>();
 
 builder.Services.AddScoped<IPostagemRepository, PostagemRepository>();
 builder.Services.AddScoped<IUnityOfWork, BlogDbContext>();
+builder.Services.AddScoped<IIdentityService, IdentityService>();
+
 
 
 // Swagger
