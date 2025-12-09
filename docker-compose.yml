@@ -1,4 +1,4 @@
-version: '3.8'
+
 
 services:
   # ---------------------------------------------
@@ -60,7 +60,7 @@ services:
       # Variável de ambiente no frontend para apontar para o backend
       - VITE_API_URL=http://blogapi:8080/api 
     # Comando para rodar o servidor de desenvolvimento Vite
-    command: npm run dev 
+    command: ["npm", "run", "dev", "--", "--host"] 
     depends_on:
       - blogapi # Depende do backend para comunicação
     

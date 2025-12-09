@@ -18,6 +18,7 @@ using Blog.Api.Infrastructure.Repositories;
 using Blog.Api.Application.Interfaces.Data;
 using Blog.Api.Application.Interfaces.Services;
 using Blog.Api.Infrastructure.Services;
+using Blog.Api.Infrastructure.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -149,6 +150,12 @@ builder.Services.AddSwaggerGen(c =>
 // ==========================================================
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await AuthDbSeeder.SeedAsync(services);
+}
 
 if (app.Environment.IsDevelopment())
 {

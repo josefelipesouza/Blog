@@ -21,7 +21,7 @@ namespace Blog.Api.Authentication.Handlers;
 
         public async Task<LoginUserResponse> Handle(LoginUserRequest request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByNameAsync(request.Username);
+            var user = await _userManager.FindByEmailAsync(request.Email);
 
             if (user == null)
                 throw new Exception("Usuário não encontrado.");
@@ -45,4 +45,5 @@ namespace Blog.Api.Authentication.Handlers;
             };
         }
     }
+
 

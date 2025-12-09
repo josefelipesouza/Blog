@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 5173
 
 # O CMD é substituído pelo comando 'npm run dev' no docker-compose.yml para desenvolvimento
-# CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "dev", "--", "--host"]

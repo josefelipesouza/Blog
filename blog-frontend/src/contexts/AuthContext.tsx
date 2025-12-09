@@ -2,7 +2,7 @@
 
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import api from '../services/api';
-import { LoginResponse, User, RegisterRequest } from '../types';
+import type { LoginResponse, User, RegisterRequest } from '../types';
 import { jwtDecode } from 'jwt-decode';
 
 interface AuthContextType {
