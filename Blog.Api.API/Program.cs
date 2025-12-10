@@ -177,6 +177,7 @@ using (var scope = app.Services.CreateScope())
     
     // 3. Rodar o Seeder
     await AuthDbSeeder.SeedAsync(services);
+    await BlogDbSeeder.SeedAsync(services);
 }
 
 if (app.Environment.IsDevelopment())
