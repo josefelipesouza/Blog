@@ -1479,8 +1479,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj": {
-              "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj"
+            "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj": {
+              "projectPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj"
             }
           }
         }

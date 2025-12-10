@@ -40,6 +40,17 @@ builder.Services.AddDbContext<BlogDbContext>(options =>
     options.UseNpgsql(connectionString,
         b => b.MigrationsAssembly(typeof(BlogDbContext).Assembly.FullName)));
 
+// 🛑 NOVO: Adicione a configuração do serviço CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+        builder => builder
+            .WithOrigins("http://localhost:5173") // A origem do seu Frontend
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()); // Permitir cookies/credenciais, se necessário
+});
+
 // ASP.NET Core Identity (ApplicationUser)
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -151,20 +162,20 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// 🛑 ALTERAÇÃO CRÍTICA AQUI: Aplicar Migrações ANTES de rodar o Seeder 🛑
+// Bloco de Migrações e Seeding (já corrigido e funcionando)
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
-    // 1. Aplicar Migrações para o AuthDbContext (cria AspNetRoles, AspNetUsers, etc.)
+    // 1. Aplicar Migrações para o AuthDbContext
     var authContext = services.GetRequiredService<AuthDbContext>();
     await authContext.Database.MigrateAsync();
 
-    // 2. Aplicar Migrações para o BlogDbContext (cria Postagens, etc.)
+    // 2. Aplicar Migrações para o BlogDbContext
     var blogContext = services.GetRequiredService<BlogDbContext>();
     await blogContext.Database.MigrateAsync();
     
-    // 3. Rodar o Seeder (popula Roles, Admin User, etc. - que dependem das tabelas existirem)
+    // 3. Rodar o Seeder
     await AuthDbSeeder.SeedAsync(services);
 }
 
@@ -173,6 +184,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// 🛑 NOVO: Habilita o middleware CORS
+// Isso deve vir ANTES de UseAuthentication e UseAuthorization
+app.UseCors("CorsPolicy"); 
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

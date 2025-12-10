@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.API\\Blog.Api.API.csproj": {}
+    "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.API\\Blog.Api.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.API\\Blog.Api.API.csproj": {
+    "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.API\\Blog.Api.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.API\\Blog.Api.API.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.API\\Blog.Api.API.csproj",
         "projectName": "Blog.Api.API",
-        "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.API\\Blog.Api.API.csproj",
+        "projectPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.API\\Blog.Api.API.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.API\\obj\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -26,14 +26,14 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\Blog.Api.Application.csproj": {
-                "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\Blog.Api.Application.csproj"
+              "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\Blog.Api.Application.csproj": {
+                "projectPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\Blog.Api.Application.csproj"
               },
-              "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj": {
-                "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj"
+              "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj": {
+                "projectPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj"
               },
-              "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj"
+              "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj"
               }
             }
           }
@@ -122,14 +122,14 @@
         }
       }
     },
-    "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\Blog.Api.Application.csproj": {
+    "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\Blog.Api.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\Blog.Api.Application.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\Blog.Api.Application.csproj",
         "projectName": "Blog.Api.Application",
-        "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\Blog.Api.Application.csproj",
+        "projectPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\Blog.Api.Application.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\obj\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -144,8 +144,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj": {
-                "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj"
+              "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj": {
+                "projectPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj"
               }
             }
           }
@@ -225,14 +225,14 @@
         }
       }
     },
-    "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj": {
+    "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj",
         "projectName": "Blog.Api.Authentication",
-        "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj",
+        "projectPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\obj\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -247,8 +247,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj": {
-                "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj"
+              "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj": {
+                "projectPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj"
               }
             }
           }
@@ -334,14 +334,14 @@
         }
       }
     },
-    "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj": {
+    "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj",
         "projectName": "Blog.Api.Domain",
-        "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj",
+        "projectPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\obj\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -417,14 +417,14 @@
         }
       }
     },
-    "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj": {
+    "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj",
         "projectName": "Blog.Api.Infrastructure",
-        "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj",
+        "projectPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\obj\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -439,14 +439,14 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\Blog.Api.Application.csproj": {
-                "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\Blog.Api.Application.csproj"
+              "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\Blog.Api.Application.csproj": {
+                "projectPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\Blog.Api.Application.csproj"
               },
-              "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj": {
-                "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj"
+              "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj": {
+                "projectPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj"
               },
-              "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj": {
-                "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj"
+              "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj": {
+                "projectPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj"
               }
             }
           }
