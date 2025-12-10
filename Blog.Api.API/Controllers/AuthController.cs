@@ -1,4 +1,4 @@
-using Blog.Api.Authentication.Requests.Register;
+//using Blog.Api.Authentication.Requests.Register;
 using Blog.Api.Authentication.Requests.Login;
 using Blog.Api.Authentication.Requests.Logout;
 using MediatR;
@@ -20,9 +20,14 @@ namespace Blog.Api.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
+        public async Task<IActionResult> Register([FromBody] Blog.Api.Authentication.Requests.Register.RegisterUserRequest request)
         {
-            return Ok(await _mediator.Send(request));
+            var response = await _mediator.Send(request);
+
+            if (!response.Success)
+                return BadRequest(response);
+
+            return Ok(response);
         }
 
         [HttpPost("login")]

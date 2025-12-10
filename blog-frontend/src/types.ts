@@ -2,29 +2,28 @@
 
 // Tipos da Postagem (PostagensController)
 export interface Postagem {
-  id: string; // Guid
+  id: string;
   titulo: string;
   conteudo: string;
-  dataCriacao: string; // ISO Date String
+  dataCriacao: string;
   autorId: string;
-  atualizadoEm?: string | null; // Opcional, como vimos
+  atualizadoEm?: string | null;
 }
 
 // Tipos de Autenticação (AuthController)
 export interface LoginResponse {
   token: string;
-  expiration: string; // Data de expiração do token
+  expiration: string;
 }
 
 export interface User {
-  id: string; // O 'sub' claim
-  email: string; // Exemplo: usado para identificação no Header
-  // Adicione a Role/Permissão do usuário aqui se for usado para a tela Admin
+  id: string;
+  email: string;
 }
 
 // Tipo de Requisição de Cadastro
 export interface RegisterRequest {
+  username: string;   // Linha adicionada
   email: string;
   password: string;
-  // Outros campos...
 }

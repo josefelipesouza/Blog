@@ -1,18 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Blog.Api.Authentication.Entities;
-using Blog.Api.Authentication.Context; // Para AuthDbContext
-using Blog.Api.Infrastructure.Context; // Para BlogDbContext
+using Blog.Api.Authentication.Context; 
+using Blog.Api.Infrastructure.Context; 
 using Blog.Api.Authentication.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using MediatR;
-using Blog.Api.Authentication.Requests.Register;
+
+// Handlers principais da aplicação
+using Blog.Api.Authentication.Handlers;
 using Blog.Api.Application.Handlers.Post.Cadastrar;
 using Blog.Api.Application.Handlers.Post.Editar;
 using Blog.Api.Application.Handlers.Post.Excluir;
 using Blog.Api.Application.Handlers.Post.Listar;
+
+// Repositórios e serviços
 using Blog.Api.Application.Interfaces.Repositories;
 using Blog.Api.Infrastructure.Repositories;
 using Blog.Api.Application.Interfaces.Data;
@@ -23,35 +27,30 @@ using Blog.Api.Infrastructure.Seed;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// ==========================================================
-// 1. Configuração dos Serviços (Injeção de Dependência)
-// ==========================================================
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+    });
 
-// Controllers
-builder.Services.AddControllers();
-
-// AuthDbContext
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseNpgsql(connectionString,
         b => b.MigrationsAssembly(typeof(AuthDbContext).Assembly.FullName)));
 
-// BlogDbContext
 builder.Services.AddDbContext<BlogDbContext>(options =>
     options.UseNpgsql(connectionString,
         b => b.MigrationsAssembly(typeof(BlogDbContext).Assembly.FullName)));
 
-// 🛑 NOVO: Adicione a configuração do serviço CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
         builder => builder
-            .WithOrigins("http://localhost:5173") // A origem do seu Frontend
+            .WithOrigins("http://localhost:5173")
             .AllowAnyMethod()
             .AllowAnyHeader()
-            .AllowCredentials()); // Permitir cookies/credenciais, se necessário
+            .AllowCredentials());
 });
 
-// ASP.NET Core Identity (ApplicationUser)
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = false;
@@ -63,12 +62,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<AuthDbContext>()
 .AddDefaultTokenProviders();
 
-// ----------------------------------------------------------
-// JWT
-// ----------------------------------------------------------
-// Lê a seção JwtSettings (mesma que no appsettings.json)
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var keyString = jwtSettings["Key"] ?? throw new Exception("JwtSettings:Key não encontrada no configuration.");
+var keyString = jwtSettings["Key"] ?? throw new Exception("JwtSettings:Key não encontrada.");
 var key = Encoding.UTF8.GetBytes(keyString);
 
 builder.Services.AddAuthentication(options =>
@@ -78,7 +73,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = false; // true em prod
+    options.RequireHttpsMetadata = false;
     options.SaveToken = true;
 
     options.TokenValidationParameters = new TokenValidationParameters
@@ -97,29 +92,23 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// MediatR
+// CORREÇÃO DO MEDIATR
+// Registrar apenas assemblies de handlers (correto)
+// MediatR - registrar assemblies de HANDLERS (corrigido)
 builder.Services.AddMediatR(
-    typeof(Program).Assembly,
-    typeof(RegisterUserRequest).Assembly,
-    typeof(CadastrarPostagemHandler).Assembly,
-    typeof(EditarPostagemHandler).Assembly,
-    typeof(ExcluirPostagemHandler).Assembly,
-    typeof(ListarPostagensHandler).Assembly
+    typeof(Blog.Api.Authentication.Handlers.RegistrarUsuarioHandler).Assembly,
+    typeof(Blog.Api.Application.Handlers.Post.Cadastrar.CadastrarPostagemHandler).Assembly,
+    typeof(Blog.Api.Application.Handlers.Post.Editar.EditarPostagemHandler).Assembly,
+    typeof(Blog.Api.Application.Handlers.Post.Excluir.ExcluirPostagemHandler).Assembly,
+    typeof(Blog.Api.Application.Handlers.Post.Listar.ListarPostagensHandler).Assembly
 );
 
-// Serviços
 builder.Services.AddScoped<JwtTokenService>();
-
 builder.Services.AddScoped<IPostagemRepository, PostagemRepository>();
 builder.Services.AddScoped<IUnityOfWork, BlogDbContext>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 
-
-
-// Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -128,17 +117,15 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1"
     });
 
-    // 🔐 Adiciona suporte a JWT no Swagger
     c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-{
-    Name = "Authorization",
-    Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
-    Scheme = "bearer",
-    BearerFormat = "JWT",
-    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-    Description = "Informe apenas o token JWT. O prefixo 'Bearer ' será adicionado automaticamente."
-});
-
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Informe apenas o token JWT. O prefixo 'Bearer ' será adicionado automaticamente."
+    });
 
     c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
     {
@@ -156,26 +143,18 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// ==========================================================
-// 2. Pipeline
-// ==========================================================
-
 var app = builder.Build();
 
-// Bloco de Migrações e Seeding (já corrigido e funcionando)
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
-    // 1. Aplicar Migrações para o AuthDbContext
     var authContext = services.GetRequiredService<AuthDbContext>();
     await authContext.Database.MigrateAsync();
 
-    // 2. Aplicar Migrações para o BlogDbContext
     var blogContext = services.GetRequiredService<BlogDbContext>();
     await blogContext.Database.MigrateAsync();
     
-    // 3. Rodar o Seeder
     await AuthDbSeeder.SeedAsync(services);
     await BlogDbSeeder.SeedAsync(services);
 }
@@ -186,9 +165,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// 🛑 NOVO: Habilita o middleware CORS
-// Isso deve vir ANTES de UseAuthentication e UseAuthorization
-app.UseCors("CorsPolicy"); 
+app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
