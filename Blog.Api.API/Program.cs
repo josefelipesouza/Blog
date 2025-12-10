@@ -51,13 +51,10 @@ builder.Services.AddCors(options =>
             .AllowCredentials());
 });
 
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    options.Password.RequireDigit = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequiredLength = 6;
+    options.User.RequireUniqueEmail = true;
 })
 .AddEntityFrameworkStores<AuthDbContext>()
 .AddDefaultTokenProviders();
@@ -93,8 +90,6 @@ builder.Services.AddAuthentication(options =>
 });
 
 // CORREÇÃO DO MEDIATR
-// Registrar apenas assemblies de handlers (correto)
-// MediatR - registrar assemblies de HANDLERS (corrigido)
 builder.Services.AddMediatR(
     typeof(Blog.Api.Authentication.Handlers.RegistrarUsuarioHandler).Assembly,
     typeof(Blog.Api.Application.Handlers.Post.Cadastrar.CadastrarPostagemHandler).Assembly,
