@@ -151,9 +151,20 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+// 🛑 ALTERAÇÃO CRÍTICA AQUI: Aplicar Migrações ANTES de rodar o Seeder 🛑
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+
+    // 1. Aplicar Migrações para o AuthDbContext (cria AspNetRoles, AspNetUsers, etc.)
+    var authContext = services.GetRequiredService<AuthDbContext>();
+    await authContext.Database.MigrateAsync();
+
+    // 2. Aplicar Migrações para o BlogDbContext (cria Postagens, etc.)
+    var blogContext = services.GetRequiredService<BlogDbContext>();
+    await blogContext.Database.MigrateAsync();
+    
+    // 3. Rodar o Seeder (popula Roles, Admin User, etc. - que dependem das tabelas existirem)
     await AuthDbSeeder.SeedAsync(services);
 }
 
