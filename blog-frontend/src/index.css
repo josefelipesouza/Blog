@@ -1,68 +1,178 @@
+/* index.css - layout base e estilos globais */
+html, body, #root {
+  height: 100%;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: rgba(255, 255, 255, 0.95);
   background-color: #242424;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Links */
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #fff;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: #dcdcff;
 }
 
-body {
-  margin: 0;
+/* Aplicação: layout em coluna, header fixo no topo, conteúdo principal preenche o resto */
+.app-root {
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
+  min-height: 100vh; /* garante preencher toda a tela */
+  height: 100%;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Header */
+.app-header {
+  background: #333;
+  color: #fff;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.2);
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+/* Conteúdo principal: ocupa todo espaço livre abaixo do header */
+.app-main {
+  flex: 1;              /* <-- crucial: ocupa todo o resto da altura */
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  min-height: 0;        /* evita crescimento além do container em alguns browsers */
+}
+
+/* Fundo com degradê (aplicável à rota de autenticação e à tela principal) */
+.auth-background, .posts-background {
+  flex: 1;
+  display: flex;
+  align-items: center;      /* centraliza verticalmente */
+  justify-content: center;  /* centraliza horizontalmente */
+  width: 100%;
+  background-image: linear-gradient(135deg, #673ab7 0%, #9c27b0 100%);
+  background-size: cover;
+  background-position: center;
+}
+
+/* Cartão de login */
+.login-card {
+  width: 360px;
+  max-width: calc(100% - 40px);
+  border-radius: 14px;
+  overflow: hidden;
+  background-color: #fff;
+  color: #333;
+  box-shadow: 0 18px 30px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top visual gradiente do cartão */
+.login-card .visual-top {
+  height: 150px;
+  background-image: linear-gradient(to top, #9c27b0 0%, #a25bc2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+/* Corpo do formulário */
+.login-card .form-wrap {
+  padding: 28px;
+}
+
+/* Título */
+.login-card h2 {
+  color: #673ab7;
+  margin: 0 0 18px 0;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+/* Input wrapper */
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 28px;
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+/* Icon placeholder */
+.input-wrapper .icon {
+  margin-right: 10px;
+  font-size: 18px;
+  color: #673ab7;
+}
+
+/* Input field */
+.input-wrapper input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background: transparent;
+}
+
+/* Botão principal */
+.btn-primary {
+  width: 100%;
+  padding: 12px 14px;
+  margin-top: 16px;
+  background: #673ab7;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 28px;
+  border: none;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: background .15s ease;
 }
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.btn-primary:hover {
+  background: #5a2fb1;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* Footer link */
+.card-footer-link {
+  display: block;
+  margin-top: 16px;
+  color: #9c27b0;
+  text-align: center;
+  font-size: 0.9rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Erros */
+.form-errors {
+  margin-top: 10px;
+  color: #c62828;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+  .login-card { width: 92%; }
+  .login-card .visual-top { height: 120px; }
 }

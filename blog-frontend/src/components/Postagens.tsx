@@ -14,6 +14,12 @@ export const PostagensList: React.FC = () => {
   const [isEditing, setIsEditing] = useState<Postagem | null>(null);
   const [newPost, setNewPost] = useState({ titulo: '', conteudo: '' });
 
+  // --- Estilos de Tema ---
+  const CARD_BG = '#333'; // Fundo dos cards de postagem
+  const CONTAINER_BG = '#242424'; // Fundo do container principal (igual ao do body)
+  const ACCENT_COLOR = '#673ab7'; // Cor de destaque (Roxo)
+  const TEXT_COLOR = 'rgba(255, 255, 255, 0.87)'; // Cor do texto (Claro)
+
   const fetchPosts = async () => {
     try {
       setLoading(true);
@@ -60,16 +66,75 @@ export const PostagensList: React.FC = () => {
     }
   };
 
-  if (loading) return <p>Carregando postagens...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  // --- Funções de Estilo ---
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '12px',
+    marginBottom: '10px',
+    // Forçando cores para aparecerem sobre fundo escuro
+    backgroundColor: '#444', 
+    color: TEXT_COLOR,
+    border: '1px solid #555',
+    borderRadius: '8px',
+    boxSizing: 'border-box'
+  };
+
+  const buttonStyle: React.CSSProperties = {
+    padding: '10px 15px',
+    backgroundColor: ACCENT_COLOR,
+    color: 'white',
+    border: 'none',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    fontWeight: 'bold',
+    transition: 'background-color 0.2s',
+  };
+
+  const buttonDangerStyle: React.CSSProperties = {
+    ...buttonStyle,
+    backgroundColor: '#dc3545',
+  };
+
+  const postCardStyle: React.CSSProperties = {
+    backgroundColor: CARD_BG,
+    border: '1px solid #444',
+    padding: '20px',
+    marginBottom: '20px',
+    borderRadius: '10px',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.5)',
+    color: TEXT_COLOR
+  };
+
+  const formContainerStyle: React.CSSProperties = {
+    ...postCardStyle, // Reutiliza o estilo de card
+    border: `2px solid ${ACCENT_COLOR}`, // Borda de destaque para o formulário
+    marginBottom: '30px',
+  };
+
+  // --- Renderização ---
+
+  if (loading) return <p style={{ padding: '20px', color: TEXT_COLOR }}>Carregando postagens...</p>;
+  if (error) return <p style={{ padding: '20px', color: '#ff6b6b' }}>{error}</p>;
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div 
+        // Container principal da lista de postagens
+        style={{ 
+            padding: '20px', 
+            maxWidth: '900px', 
+            margin: '0 auto', // Centraliza a lista
+            backgroundColor: CONTAINER_BG, 
+            color: TEXT_COLOR 
+        }}
+    >
       <h1>Postagens do Blog</h1>
 
       {isAuthenticated && (
-        <div style={{ marginBottom: '30px', border: '1px solid #ddd', padding: '20px' }}>
-          <h2>{isEditing ? 'Editar Postagem' : 'Criar Nova Postagem'}</h2>
+        <div style={formContainerStyle}>
+          <h2 style={{ color: ACCENT_COLOR, marginTop: 0 }}>
+            {isEditing ? 'Editar Postagem' : 'Criar Nova Postagem'}
+          </h2>
 
           <form onSubmit={handleCreateOrEdit}>
             <input
@@ -78,7 +143,7 @@ export const PostagensList: React.FC = () => {
               value={newPost.titulo}
               onChange={(e) => setNewPost({ ...newPost, titulo: e.target.value })}
               required
-              style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+              style={inputStyle}
             />
 
             <textarea
@@ -86,18 +151,21 @@ export const PostagensList: React.FC = () => {
               value={newPost.conteudo}
               onChange={(e) => setNewPost({ ...newPost, conteudo: e.target.value })}
               required
-              style={{ width: '100%', padding: '8px', marginBottom: '10px', minHeight: '100px' }}
+              style={{ ...inputStyle, minHeight: '100px' }}
             />
 
-            <button type="submit">
+            <button type="submit" style={buttonStyle}>
               {isEditing ? 'Salvar Edição' : 'Publicar'}
             </button>
 
             {isEditing && (
               <button
                 type="button"
-                onClick={() => setIsEditing(null)}
-                style={{ marginLeft: '10px' }}
+                onClick={() => {
+                  setIsEditing(null);
+                  setNewPost({ titulo: '', conteudo: '' }); // Limpa campos ao cancelar
+                }}
+                style={{ ...buttonStyle, marginLeft: '10px', backgroundColor: '#6c757d' }}
               >
                 Cancelar
               </button>
@@ -110,20 +178,21 @@ export const PostagensList: React.FC = () => {
         const isOwner = user?.id === post.autorId;
 
         return (
-          <div key={post.id} style={{ border: '1px solid #ccc', padding: '15px', marginBottom: '20px' }}>
-            <h3>{post.titulo}</h3>
+          <div key={post.id} style={postCardStyle}>
+            <h3 style={{ color: ACCENT_COLOR, marginTop: 0 }}>{post.titulo}</h3>
             <p>{post.conteudo}</p>
-            <small>
+            <small style={{ color: '#aaa' }}>
               Publicado em: {new Date(post.dataCriacao).toLocaleDateString()}
             </small>
 
             {isAuthenticated && isOwner && (
-              <div style={{ marginTop: '10px' }}>
+              <div style={{ marginTop: '15px' }}>
                 <button
                   onClick={() => {
                     setIsEditing(post);
                     setNewPost({ titulo: post.titulo, conteudo: post.conteudo });
                   }}
+                  style={buttonStyle}
                 >
                   Editar
                 </button>
@@ -131,9 +200,8 @@ export const PostagensList: React.FC = () => {
                 <button
                   onClick={() => handleDelete(post.id)}
                   style={{
+                    ...buttonDangerStyle,
                     marginLeft: '10px',
-                    backgroundColor: 'red',
-                    color: 'white'
                   }}
                 >
                   Excluir

@@ -1,5 +1,4 @@
 // src/App.tsx
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -7,72 +6,67 @@ import { AuthForm } from './components/Auth';
 import { PostagensList } from './components/Postagens';
 import { AdminUsersList } from './components/AdminUsers';
 
-// Componente para proteger a rota (ex: Admin)
-const ProtectedRoute: React.FC<{ element: React.ReactElement, allowedRole?: string }> = ({ element, allowedRole }) => {
-    const { isAuthenticated, user } = useAuth();
-
-    // Verificação de autenticação básica
-    if (!isAuthenticated) {
-        return <Navigate to="/login" replace />;
-    }
-
-    // Se a role for necessária, verifique (aqui estamos simplificando, você deve verificar a role real do seu 'user' objeto)
-    if (allowedRole && user && user.email !== "admin@blog.com") { // Exemplo simplificado de verificação de 'Admin'
-         return <Navigate to="/" replace />;
-    }
-
-    return element;
-};
-
+/* Header component - usa classes do CSS global */
 const Header: React.FC = () => {
-    const { isAuthenticated, user, logout } = useAuth();
-    // Você precisará de uma forma robusta de verificar a Role do usuário (e.g., usando claims do JWT)
-    const isAdmin = user?.email === "admin@blog.com"; 
+  const { isAuthenticated, user, logout } = useAuth();
+  const isAdmin = user?.email === "admin@blog.com"; // ajuste conforme claims reais
 
-    return (
-        <nav style={{ background: '#333', padding: '15px', color: 'white', display: 'flex', justifyContent: 'space-between' }}>
-            <div>
-                <Link to="/" style={{ color: 'white', marginRight: '20px', textDecoration: 'none' }}>Home (Posts)</Link>
-                {isAdmin && (
-                    <Link to="/admin" style={{ color: 'yellow', textDecoration: 'none' }}>Admin (Usuários)</Link>
-                )}
-            </div>
-            <div>
-                {isAuthenticated ? (
-                    <>
-                        <span style={{ marginRight: '15px' }}>Olá, {user?.email}</span>
-                        <button onClick={logout} style={{ padding: '5px 10px' }}>Logout</button>
-                    </>
-                ) : (
-                    <Link to="/login" style={{ color: 'white', textDecoration: 'none' }}>Login/Cadastro</Link>
-                )}
-            </div>
-        </nav>
-    );
-}
+  return (
+    <header className="app-header">
+      <div>
+        <Link to="/" style={{ color: '#fff', marginRight: 20 }}>Home (Posts)</Link>
+        {isAdmin && <Link to="/admin" style={{ color: 'yellow' }}>Admin (Usuários)</Link>}
+      </div>
 
+      <div>
+        {isAuthenticated ? (
+          <>
+            <span style={{ marginRight: 12 }}>Olá, {user?.email}</span>
+            <button onClick={logout} style={{ padding: '6px 10px', borderRadius: 6 }}>Logout</button>
+          </>
+        ) : (
+          <Link to="/login" style={{ color: '#fff' }}>Login/Cadastro</Link>
+        )}
+      </div>
+    </header>
+  );
+};
 
 const App: React.FC = () => {
   return (
     <Router>
       <AuthProvider>
-        <Header />
-        <Routes>
-          {/* Tela de Postagens (acessível para todos) */}
-          <Route path="/" element={<PostagensList />} />
-          
-          {/* Tela de Login/Cadastro */}
-          <Route path="/login" element={<AuthForm />} />
-          
-          {/* Tela de Admin (somente para usuários autenticados com permissão de Admin) */}
-          <Route 
-            path="/admin" 
-            element={<ProtectedRoute element={<AdminUsersList />} allowedRole="Admin" />} 
-          />
+        <div className="app-root">
+          <Header />
 
-          {/* Fallback para páginas não encontradas */}
-          <Route path="*" element={<h1>404 - Página Não Encontrada</h1>} />
-        </Routes>
+          {/* main ocupa todo o espaço restante e aplica o background das rotas */}
+          <main className="app-main">
+            <Routes>
+              {/* Tela principal (posts) usa a mesma classe de background para estética */}
+              <Route path="/" element={
+                <div className="posts-background">
+                  <PostagensList />
+                </div>
+              } />
+
+              {/* Rota de login/cadastro */}
+              <Route path="/login" element={
+                <div className="auth-background">
+                  <AuthForm />
+                </div>
+              } />
+
+              {/* Rota admin (se existir) */}
+              <Route path="/admin" element={
+                <div className="posts-background">
+                  <AdminUsersList />
+                </div>
+              } />
+
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </main>
+        </div>
       </AuthProvider>
     </Router>
   );

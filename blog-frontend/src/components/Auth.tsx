@@ -1,28 +1,30 @@
+// src/components/Auth.tsx
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { AxiosError } from 'axios';
 
 export const AuthForm: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [username, setUsername] = useState('');      // [NOVO]
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, register } = useAuth();
 
   const [errors, setErrors] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors([]);
+    setLoading(true);
 
     try {
       if (isLogin) {
+        // supondo que login lança ou resolve conforme seu AuthContext
         await login(email, password);
+        // se login não redirecionar, seu AuthContext ou App deve reagir à mudança de auth
       } else {
-
-        // Envio atualizado com username
         const registerErrors = await register({ username, email, password });
-
         if (registerErrors.length > 0) {
           setErrors(registerErrors);
           return;
@@ -32,95 +34,93 @@ export const AuthForm: React.FC = () => {
         setIsLogin(true);
       }
     } catch (err: any) {
-      const axiosError = err as AxiosError;
-
-      if (axiosError.response && axiosError.response.data) {
-        const responseData = axiosError.response.data as { message?: string, errors?: string[] };
-        const errorMessage =
-          responseData.message ||
-          responseData.errors?.join(' | ') ||
-          'Credenciais inválidas ou erro no login.';
-
-        setErrors([errorMessage]);
+      const axiosErr = err as AxiosError;
+      if (axiosErr?.response?.data) {
+        const data = axiosErr.response.data as any;
+        if (Array.isArray(data?.errors)) {
+          setErrors(data.errors);
+        } else if (data?.message) {
+          setErrors([data.message]);
+        } else {
+          setErrors([axiosErr.message || 'Erro ao autenticar.']);
+        }
       } else {
-        setErrors(['Ocorreu um erro inesperado ao tentar autenticar.']);
+        setErrors([err?.message || 'Erro inesperado.']);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ccc' }}>
-      <h2>{isLogin ? 'Login' : 'Cadastro'}</h2>
+    <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+      <div className="login-card" role="region" aria-label="Auth Card">
+        <div className="visual-top">
+          {isLogin ? 'Bem-vindo de volta' : 'Crie sua conta'}
+        </div>
 
-      <form onSubmit={handleSubmit}>
+        <div className="form-wrap">
+          <h2>{isLogin ? 'Login' : 'Cadastro'}</h2>
 
-        {/* Campo username somente no cadastro */}
-        {!isLogin && (
-          <input
-            type="text"
-            placeholder="Nome de usuário"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
-          />
-        )}
+          {errors.length > 0 && (
+            <div className="form-errors">
+              {errors.map((err, idx) => <div key={idx}>• {err}</div>)}
+            </div>
+          )}
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
-        />
+          <form onSubmit={handleSubmit} noValidate>
+            {!isLogin && (
+              <div className="input-wrapper">
+                <span className="icon">👤</span>
+                <input
+                  type="text"
+                  placeholder="Nome de usuário"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
+              </div>
+            )}
 
-        <input
-          type="password"
-          placeholder="Senha"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          style={{ width: '100%', padding: '10px', marginBottom: '20px' }}
-        />
+            <div className="input-wrapper">
+              <span className="icon">📧</span>
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
 
-        {errors.length > 0 && (
-          <div style={{ marginBottom: '10px' }}>
-            {errors.map((err, index) => (
-              <p key={index} style={{ color: 'red', margin: '5px 0' }}>
-                {err}
-              </p>
-            ))}
-          </div>
-        )}
+            <div className="input-wrapper">
+              <span className="icon">🔒</span>
+              <input
+                type="password"
+                placeholder="Senha"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
 
-        <button
-          type="submit"
-          style={{
-            padding: '10px 15px',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none'
-          }}
-        >
-          {isLogin ? 'Entrar' : 'Registrar'}
-        </button>
-      </form>
+            <button className="btn-primary" type="submit" disabled={loading}>
+              {loading ? (isLogin ? 'Entrando...' : 'Registrando...') : (isLogin ? 'ENTRAR' : 'REGISTRAR')}
+            </button>
+          </form>
 
-      <button
-        onClick={() => setIsLogin(!isLogin)}
-        style={{
-          marginTop: '15px',
-          background: 'none',
-          border: 'none',
-          color: '#007bff',
-          cursor: 'pointer'
-        }}
-      >
-        {isLogin
-          ? 'Precisa de uma conta? Cadastre-se'
-          : 'Já tem uma conta? Faça login'}
-      </button>
+          <button
+            className="card-footer-link"
+            onClick={() => {
+              setIsLogin(!isLogin);
+              setErrors([]);
+            }}
+            aria-pressed={!isLogin}
+          >
+            {isLogin ? 'Ainda não tem conta? Crie sua conta' : 'Já possui uma conta? Acesse'}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
