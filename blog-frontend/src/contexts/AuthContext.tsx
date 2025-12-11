@@ -53,9 +53,10 @@ const decodeToken = (token: string): User | null => {
         console.log("Role capturada:", role);
 
         const user: User = {
-            id: decoded.sub,
-            email: decoded.email || decoded.unique_name,
-            role: role 
+          id: decoded.sub,
+          email: decoded.email || decoded.unique_name,
+          role: role,
+          userName: ''
         };
 
         return user;

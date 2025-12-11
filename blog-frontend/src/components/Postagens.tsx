@@ -1,15 +1,24 @@
-// src/components/Postagens.tsx - Versão Corrigida Final
+// src/components/Postagens.tsx - Versão Corrigida Final com Mapeamento de Usuários
 
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import type { Postagem } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 
+// Define o tipo de dado para a postagem (para garantir a tipagem)
+interface PostagemComAutor extends Postagem {
+    // Adicione outros campos necessários se sua API os retornar
+    autorUsername?: string; 
+}
+
+
 export const PostagensList: React.FC = () => {
     const { isAuthenticated, user } = useAuth();
-    const [posts, setPosts] = useState<Postagem[]>([]);
+    const [posts, setPosts] = useState<PostagemComAutor[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    // NOVIDADE: Estado para mapear AutorId -> UserName
+    const [userMap, setUserMap] = useState<Record<string, string>>({}); 
 
     const [isEditing, setIsEditing] = useState<Postagem | null>(null);
     const [newPost, setNewPost] = useState({ titulo: '', conteudo: '' });
@@ -20,10 +29,27 @@ export const PostagensList: React.FC = () => {
     const ACCENT_COLOR = '#673ab7'; 
     const TEXT_COLOR = 'rgba(255, 255, 255, 0.87)'; 
 
+    // NOVIDADE: Função para buscar todos os usuários e criar o mapa
+    const fetchUsers = async () => {
+        try {
+            // ASSUMÇÃO: Endpoint que retorna uma lista de usuários com Id e UserName
+            const response = await api.get<Array<{ id: string; userName: string }>>('/usuarios'); 
+            
+            const map: Record<string, string> = {};
+            response.data.forEach(u => {
+                map[u.id] = u.userName;
+            });
+            setUserMap(map);
+        } catch (err) {
+            console.error('Erro ao carregar mapa de usuários.', err);
+            // Em caso de falha, não impede o carregamento dos posts
+        }
+    };
+    
     const fetchPosts = async () => {
         try {
             setLoading(true);
-            const response = await api.get<Postagem[]>('/postagens');
+            const response = await api.get<PostagemComAutor[]>('/postagens');
             setPosts(response.data);
         } catch (err) {
             setError('Erro ao carregar postagens.');
@@ -33,9 +59,11 @@ export const PostagensList: React.FC = () => {
     };
 
     useEffect(() => {
-        fetchPosts();
+        fetchUsers(); // 1. Carrega o mapa de usuários primeiro
+        fetchPosts(); // 2. Carrega as postagens
     }, []);
 
+    // ... (handleCreateOrEdit e handleDelete permanecem os mesmos) ...
     const handleCreateOrEdit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -66,8 +94,8 @@ export const PostagensList: React.FC = () => {
         }
     };
 
-    // --- Funções de Estilo ---
-
+    // --- Funções de Estilo (permanecem as mesmas) ---
+    // ... (inputStyle, buttonStyle, buttonDangerStyle, postCardStyle, formContainerStyle) ...
     const inputStyle: React.CSSProperties = {
         width: '100%',
         padding: '12px',
@@ -95,7 +123,6 @@ export const PostagensList: React.FC = () => {
         backgroundColor: '#dc3545',
     };
 
-    // Garante 100% da largura do container de 900px
     const postCardStyle: React.CSSProperties = {
         backgroundColor: CARD_BG,
         border: '1px solid #444',
@@ -107,7 +134,6 @@ export const PostagensList: React.FC = () => {
         width: '100%', 
     };
 
-    // Garante 100% da largura
     const formContainerStyle: React.CSSProperties = {
         ...postCardStyle, 
         border: `2px solid ${ACCENT_COLOR}`, 
@@ -122,27 +148,23 @@ export const PostagensList: React.FC = () => {
 
     return (
         <div 
-            // Container principal da lista de postagens
             style={{ 
-                // Mantemos o padding superior para espaçar o conteúdo do header
                 padding: '20px', 
                 paddingTop: '80px', 
-                
                 maxWidth: '900px', 
-                margin: '0 auto', // Centraliza a lista
+                margin: '0 auto', 
                 backgroundColor: CONTAINER_BG, 
                 color: TEXT_COLOR 
             }}
         >
             <h1>Postagens do Blog</h1>
 
-            {/* O formulário aparece aqui, logo abaixo do H1 */}
+            {/* ... (Bloco de criação/edição permanece o mesmo) ... */}
             {isAuthenticated && (
                 <div style={formContainerStyle}>
                     <h2 style={{ color: ACCENT_COLOR, marginTop: 0 }}>
                         {isEditing ? 'Editar Postagem' : 'Criar Nova Postagem'}
                     </h2>
-
                     <form onSubmit={handleCreateOrEdit}>
                         <input
                             type="text"
@@ -152,7 +174,6 @@ export const PostagensList: React.FC = () => {
                             required
                             style={inputStyle}
                         />
-
                         <textarea
                             placeholder="Conteúdo"
                             value={newPost.conteudo}
@@ -160,11 +181,9 @@ export const PostagensList: React.FC = () => {
                             required
                             style={{ ...inputStyle, minHeight: '100px' }} 
                         />
-
                         <button type="submit" style={buttonStyle}>
                             {isEditing ? 'Salvar Edição' : 'Publicar'}
                         </button>
-
                         {isEditing && (
                             <button
                                 type="button"
@@ -184,13 +203,34 @@ export const PostagensList: React.FC = () => {
             {/* As postagens são listadas abaixo do formulário */}
             {posts.map(post => {
                 const isOwner = user?.id === post.autorId;
+                
+                // CORREÇÃO: Usa o userMap para encontrar o UserName.
+                // Se o userMap não estiver carregado ou o ID não for encontrado, usa 'Desconhecido'.
+                const autorUsername = userMap[post.autorId] || 'Desconhecido'; 
 
                 return (
                     <div key={post.id} style={postCardStyle}>
                         <h3 style={{ color: ACCENT_COLOR, marginTop: 0 }}>{post.titulo}</h3>
+                        
+                        {/* Exibe o nome de usuário do autor com '@' */}
+                        <p style={{ 
+                            color: ACCENT_COLOR, 
+                            fontSize: '0.9rem', 
+                            marginBottom: '10px' 
+                        }}>
+                            Por: @{autorUsername}
+                        </p>
+                        
                         <p>{post.conteudo}</p>
+                        
                         <small style={{ color: '#aaa' }}>
-                            Publicado em: {new Date(post.dataCriacao).toLocaleDateString()}
+                            Publicado em: {new Date(post.dataCriacao).toLocaleDateString('pt-BR', { 
+                                year: 'numeric', 
+                                month: '2-digit', 
+                                day: '2-digit', 
+                                hour: '2-digit', 
+                                minute: '2-digit' 
+                            })}
                         </small>
 
                         {isAuthenticated && isOwner && (

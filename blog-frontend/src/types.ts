@@ -20,7 +20,8 @@ export interface LoginResponse {
 export interface User {
   id: string;
   email: string;
-  role: string;      // Agora sempre existe (não opcional)
+  userName: string
+  role: string;     
 }
 
 // Requisição de cadastro
