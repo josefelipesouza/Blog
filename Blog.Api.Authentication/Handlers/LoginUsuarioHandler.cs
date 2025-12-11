@@ -31,11 +31,12 @@ namespace Blog.Api.Authentication.Handlers;
             if (!passwordValid)
                 throw new Exception("Senha inválida.");
 
-            var token = _jwtService.GenerateToken(
-                user.Id,
-                user.UserName ?? throw new Exception("UserName inválido."),
-                user.Email ?? throw new Exception("Email inválido.")
-            );
+            // -------------------------------------------------------------------------
+            // 🎯 CORREÇÃO:
+            // 1. Chamando GenerateToken com o argumento correto (o objeto 'user').
+            // 2. Usando 'await' porque o método agora é async Task<string>.
+            // -------------------------------------------------------------------------
+            var token = await _jwtService.GenerateToken(user);
 
             return new LoginUserResponse
             {
@@ -45,5 +46,3 @@ namespace Blog.Api.Authentication.Handlers;
             };
         }
     }
-
-

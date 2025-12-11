@@ -3986,11 +3986,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj",
       "projectName": "Blog.Api.Infrastructure",
-      "projectPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj",
+      "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\obj\\",
+      "outputPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"

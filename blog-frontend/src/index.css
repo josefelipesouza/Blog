@@ -59,13 +59,25 @@ a:hover {
 .auth-background, .posts-background {
   flex: 1;
   display: flex;
-  align-items: center;      /* centraliza verticalmente */
   justify-content: center;  /* centraliza horizontalmente */
   width: 100%;
   background-image: linear-gradient(135deg, #673ab7 0%, #9c27b0 100%);
   background-size: cover;
   background-position: center;
 }
+
+/* * CORREÇÃO: Alinhamento vertical específico para cada tela.
+ * Assumindo que a classe que contém a tela de login/cadastro é '.auth-background' 
+ * e a que contém a lista de posts é '.posts-background'.
+ */
+.auth-background {
+    align-items: center;     /* Centraliza o formulário de login verticalmente */
+}
+
+.posts-background {
+    align-items: flex-start; /* Mantém o conteúdo do blog no topo */
+}
+
 
 /* Cartão de login */
 .login-card {

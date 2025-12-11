@@ -1,6 +1,6 @@
 // blog-frontend/src/types.ts
 
-// Tipos da Postagem (PostagensController)
+// Tipos de Postagens
 export interface Postagem {
   id: string;
   titulo: string;
@@ -10,20 +10,22 @@ export interface Postagem {
   atualizadoEm?: string | null;
 }
 
-// Tipos de Autenticação (AuthController)
+// Resposta de Login (AuthController)
 export interface LoginResponse {
   token: string;
   expiration: string;
 }
 
+// Representação do usuário autenticado
 export interface User {
   id: string;
   email: string;
+  role: string;      // Agora sempre existe (não opcional)
 }
 
-// Tipo de Requisição de Cadastro
+// Requisição de cadastro
 export interface RegisterRequest {
-  username: string;   // Linha adicionada
+  username: string;
   email: string;
   password: string;
 }

@@ -9,13 +9,19 @@ import { AdminUsersList } from './components/AdminUsers';
 /* Header component - usa classes do CSS global */
 const Header: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuth();
-  const isAdmin = user?.email === "admin@blog.com"; // ajuste conforme claims reais
+  // ALTERAÇÃO 1: Corrige o email do admin para o especificado
+  const isAdmin = user?.email === "Admin@gmail.com.br"; 
 
   return (
     <header className="app-header">
       <div>
-        <Link to="/" style={{ color: '#fff', marginRight: 20 }}>Home (Posts)</Link>
-        {isAdmin && <Link to="/admin" style={{ color: 'yellow' }}>Admin (Usuários)</Link>}
+        {/* ALTERAÇÃO 2: Link de Postagens só aparece se estiver autenticado */}
+        {isAuthenticated && (
+          <Link to="/" style={{ color: '#fff', marginRight: 20 }}>Postagens (Home)</Link>
+        )}
+        
+        {/* ALTERAÇÃO 3: Link Admin/Usuários só aparece se for admin (e logado) */}
+        {isAdmin && <Link to="/admin" style={{ color: 'yellow' }}>Usuários (Admin)</Link>}
       </div>
 
       <div>
@@ -25,12 +31,24 @@ const Header: React.FC = () => {
             <button onClick={logout} style={{ padding: '6px 10px', borderRadius: 6 }}>Logout</button>
           </>
         ) : (
+          /* Link de Login/Cadastro só aparece se NÃO estiver autenticado */
           <Link to="/login" style={{ color: '#fff' }}>Login/Cadastro</Link>
         )}
       </div>
     </header>
   );
 };
+
+// Componente Wrapper para Rotas Protegidas ou Específicas
+const ProtectedRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
+  const { isAuthenticated } = useAuth();
+  // ALTERAÇÃO 4: Redireciona para /login se não estiver autenticado
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
+
 
 const App: React.FC = () => {
   return (
@@ -39,30 +57,35 @@ const App: React.FC = () => {
         <div className="app-root">
           <Header />
 
-          {/* main ocupa todo o espaço restante e aplica o background das rotas */}
           <main className="app-main">
             <Routes>
-              {/* Tela principal (posts) usa a mesma classe de background para estética */}
-              <Route path="/" element={
-                <div className="posts-background">
-                  <PostagensList />
-                </div>
-              } />
-
-              {/* Rota de login/cadastro */}
+              {/* Rota de login/cadastro (acessível por todos) */}
               <Route path="/login" element={
                 <div className="auth-background">
                   <AuthForm />
                 </div>
               } />
 
-              {/* Rota admin (se existir) */}
-              <Route path="/admin" element={
-                <div className="posts-background">
-                  <AdminUsersList />
-                </div>
+              {/* Rota principal de Postagens (PROTEGIDA) */}
+              <Route path="/" element={
+                <ProtectedRoute>
+                  <div className="posts-background">
+                    <PostagensList />
+                  </div>
+                </ProtectedRoute>
               } />
 
+              {/* Rota admin (PROTEGIDA) */}
+              <Route path="/admin" element={
+                <ProtectedRoute>
+                  <div className="posts-background">
+                    <AdminUsersList />
+                  </div>
+                </ProtectedRoute>
+              } />
+
+              {/* Rota curinga: Redireciona para Home (Postagens) se logado, ou para Login se não logado */}
+              {/* Esta lógica garante que a tela inicial será Postagens (se logado) ou Login (se deslogado) */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>

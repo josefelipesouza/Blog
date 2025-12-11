@@ -3,22 +3,42 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import type { User } from '../types';
+import { useAuth } from '../contexts/AuthContext';
 
 export const AdminUsersList: React.FC = () => {
+  const { token, isAuthenticated, user } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // ESTE ENDPOINT PRECISA SER IMPLEMENTADO NA API (.NET)
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      // **Atenção: Assumindo um endpoint /auth/users que só Admins podem acessar**
-      const response = await api.get<User[]>('/auth/users');
+
+      if (!isAuthenticated || !token) {
+        throw new Error('Usuário não autenticado');
+      }
+
+      if (!user || user.role !== 'Admin') {
+        throw new Error('Acesso negado. Necessita permissão de Admin.');
+      }
+
+      // Faz requisição para o endpoint protegido com o token JWT
+      const response = await api.get<User[]>('/auth/users', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
       setUsers(response.data);
     } catch (err: any) {
-      // O erro 401 ou 403 ocorrerá se o usuário não for Admin ou não estiver logado
-      setError(err.response?.status === 403 ? 'Acesso negado. Necessita permissão de Admin.' : 'Erro ao carregar usuários.');
+      setError(
+        err.message === 'Usuário não autenticado'
+          ? 'Usuário não autenticado. Faça login.'
+          : err.message === 'Acesso negado. Necessita permissão de Admin.'
+          ? 'Acesso negado. Necessita permissão de Admin.'
+          : 'Erro ao carregar usuários.'
+      );
     } finally {
       setLoading(false);
     }
@@ -26,7 +46,7 @@ export const AdminUsersList: React.FC = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [token, isAuthenticated, user]); // Reexecuta quando token, autenticação ou user mudar
 
   if (loading) return <p>Carregando usuários...</p>;
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
@@ -39,14 +59,15 @@ export const AdminUsersList: React.FC = () => {
           <tr style={{ backgroundColor: '#f2f2f2' }}>
             <th style={{ border: '1px solid #ddd', padding: '8px' }}>ID</th>
             <th style={{ border: '1px solid #ddd', padding: '8px' }}>Email</th>
-            {/* Adicionar coluna de Role/Permissão se disponível */}
+            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Role</th>
           </tr>
         </thead>
         <tbody>
-          {users.map(user => (
-            <tr key={user.id}>
-              <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.id}</td>
-              <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.email}</td>
+          {users.map(u => (
+            <tr key={u.id}>
+              <td style={{ border: '1px solid #ddd', padding: '8px' }}>{u.id}</td>
+              <td style={{ border: '1px solid #ddd', padding: '8px' }}>{u.email}</td>
+              <td style={{ border: '1px solid #ddd', padding: '8px' }}>{u.role || '-'}</td>
             </tr>
           ))}
         </tbody>
