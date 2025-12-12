@@ -34,21 +34,18 @@ public class LoginUsuarioHandler : IRequestHandler<LoginUserRequest, LoginUserRe
         if (!passwordValid)
             throw new Exception("Senha inválida.");
 
-        // 🎯 NOVA ADIÇÃO: Buscar as roles do usuário
+     
         var roles = await _userManager.GetRolesAsync(user);
 
-        // -------------------------------------------------------------------------
-        // Geração do Token JWT (o método GenerateToken deve usar essas roles para criar as claims)
-        // -------------------------------------------------------------------------
         var token = await _jwtService.GenerateToken(user); 
 
-        // 🎯 ATUALIZAÇÃO: Incluir as roles na resposta
+        
         return new LoginUserResponse
         {
             Token = token,
             Username = user.UserName!,
             Email = user.Email!,
-            Roles = roles.ToList() // Convertendo a coleção retornada para List<string> ou IReadOnlyList<string>
+            Roles = roles.ToList() //
         };
     }
 }

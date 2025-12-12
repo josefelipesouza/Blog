@@ -19,11 +19,11 @@ namespace Blog.Api.Authentication.Handlers;
         {
             var errors = new List<string>();
 
-            // Normalize e trim do input para comparação segura
+            
             var emailNormalized = request.Email?.Trim().ToUpperInvariant() ?? string.Empty;
             var userNameNormalized = request.Username?.Trim().ToUpperInvariant() ?? string.Empty;
 
-            // Checagem direta no store (consulta ao IQueryable Users) - é à prova de "bypass"
+            
             var emailExists = await _userManager.Users
                 .AsNoTracking()
                 .AnyAsync(u => u.NormalizedEmail == emailNormalized, cancellationToken);
@@ -54,10 +54,10 @@ namespace Blog.Api.Authentication.Handlers;
                 };
             }
 
-            // Criar novo usuário (UserName = Username ou Email conforme sua regra)
+            
             var user = new ApplicationUser
             {
-                UserName = request.Username?.Trim(), // ou request.Email se preferir username = email
+                UserName = request.Username?.Trim(), 
                 Email = request.Email?.Trim()
             };
 

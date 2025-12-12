@@ -66,7 +66,7 @@ namespace Blog.Api.Infrastructure.Seed;
         {
             if (blogContext.Postagens.Any())
             {
-                // Postagens já existem, não faz o seeding
+                
                 return;
             }
 
