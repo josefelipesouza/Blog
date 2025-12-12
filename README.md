@@ -1,7 +1,103 @@
-📘 Blog API & Frontend (Full-Stack)Projeto Full-Stack desenvolvido com API em .NET 8 e Frontend em React (TypeScript). A aplicação utiliza PostgreSQL como banco de dados e é totalmente conteinerizada via Docker.🛠 Tecnologias UtilizadasComponenteTecnologiaVersãoNotasBackend API.NET8.0Arquitetura em Camadas, CQRS (MediatR), JWTBanco de DadosPostgreSQL(Definido no Docker)Persistência de dados (ORM: Entity Framework Core)FrontendReact (TS)(Definido no Docker)Interface do usuário e consumo da APIORMEntity Framework Core(Para comunicação com o PostgreSQL)Mapeamento Objeto-RelacionalConteinerizaçãoDocker / Docker ComposeOrquestração de serviços🚀 1. Execução Full-Stack (Ambiente Completo)Este método é ideal para subir o projeto completo, incluindo a API e o Frontend, com um único comando Docker.A. Local de ExecuçãoAbra o terminal e navegue para o diretório raiz do projeto, onde está o arquivo docker-compose.yml.Exemplo:Bashcd C:\Users\User\desktop\dev\.net\blog.api
-B. Comando de InicializaçãoExecute o seguinte comando para construir (se necessário) e iniciar todos os três serviços (DB, API e Frontend):Bashdocker-compose up --build
-C. Endereços de AcessoApós a inicialização bem-sucedida, acesse a aplicação:ComponenteURL de AcessoNotaFrontend (Aplicação)👉 http://localhost:5173/Inicia na tela de login/homeFrontend (Login)👉 http://localhost:5173/loginAcesso direto à página de LoginAPI (Swagger UI)👉 http://localhost:<PORTA_DA_API>/swaggerInterface interativa para testar a APIObservação: A porta padrão para o Frontend é 5173. A porta da API (<PORTA_DA_API>) é definida no seu docker-compose.yml (geralmente uma porta mapeada como 5000 ou 5001).💻 2. Execução Apenas do Backend (Desenvolvimento Local da API)Este método é ideal para quem está focado apenas no desenvolvimento da API e deseja rodá-la em modo hot reload no ambiente local.A. Iniciar o Banco de Dados (PostgreSQL)Primeiro, inicie o container do PostgreSQL, que a API usará como host.Local de Execução: Diretório raiz do projeto.Comando:Bash# Inicia apenas o serviço do banco de dados (assumindo o nome do serviço 'db')
+📘 Blog API & Frontend (Full-Stack)
+
+Projeto Full-Stack desenvolvido com API em .NET 8, Frontend em React (TypeScript) e banco de dados PostgreSQL. Todo o ambiente é totalmente conteinerizado utilizando Docker e Docker Compose.
+
+🛠 Tecnologias Utilizadas
+Componente	Tecnologia	Versão	Notas
+Backend API	.NET	8.0	Arquitetura em Camadas, CQRS (MediatR), JWT
+Banco de Dados	PostgreSQL	Definido no Docker	Persistência via Entity Framework Core
+Frontend	React (TypeScript)	Definido no Docker	Interface do usuário, consumo da API
+ORM	Entity Framework Core	-	Mapeamento Objeto-Relacional
+Conteinerização	Docker / Docker Compose	-	Orquestração dos serviços
+🚀 1. Execução Full-Stack (Ambiente Completo)
+
+Modo recomendado para subir a aplicação completa (API + Frontend + Banco) com um único comando Docker.
+
+A. Local de Execução
+
+Abra o terminal e navegue até a raiz do projeto, onde está o arquivo docker-compose.yml.
+
+Exemplo:
+
+cd C:\Users\User\desktop\dev.net\blog.api
+
+B. Comando de Inicialização
+
+Execute:
+
+docker-compose up --build
+
+C. Endereços de Acesso
+
+Após a inicialização, utilize:
+
+Componente	URL de Acesso	Descrição
+Frontend	http://localhost:5173/
+	Tela inicial
+Login do Frontend	http://localhost:5173/login
+	Acesso direto ao login
+API (Swagger)	http://localhost
+:<PORTA_DA_API>/swagger	UI interativa para testar a API
+
+Observação:
+A porta padrão do frontend é 5173.
+A porta da API é definida no docker-compose.yml (geralmente 5000 ou 5001).
+
+💻 2. Execução Apenas do Backend (Desenvolvimento Local da API)
+
+Ideal para trabalhar exclusivamente na API utilizando hot reload.
+
+A. Iniciar o Banco de Dados
+
+No diretório raiz do projeto:
+
 docker-compose up db
-B. Iniciar a API (.NET 8)Em seguida, execute a API localmente.Local de Execução: Navegue para a pasta da API.Bashcd Blog.Api.API
-Comando:Execute a API usando o SDK do .NET:Bashdotnet run
-C. Endereço de Acesso (Swagger)A API será iniciada na porta configurada localmente (geralmente via launchSettings.json ou appsettings.json).URL do Swagger UI:👉 http://localhost:5160/swagger/index.html🗃 Detalhes TécnicosArquiteturaA API adota uma arquitetura limpa em camadas com o uso do padrão CQRS (Command Query Responsibility Segregation) implementado via MediatR:API: Responsável por controladores e configuração.Application: Contém a lógica de negócio (Handlers do MediatR) e interfaces.Domain: Entidades de negócio e regras.Infrastructure: Implementações de serviços e repositórios (acesso ao PostgreSQL via EF Core).Acessando o SwaggerO Swagger UI permite:Ver toda a documentação dos endpoints de CRUD de Postagens e Autenticação.Utilizar o botão "Authorize" para incluir o Bearer Token e testar as rotas protegidas (é necessário primeiro obter um token nas rotas de Login ou Registro).🛑 Parar e LimparPara encerrar os serviços de forma limpa, use o docker-compose down no diretório raiz do projeto:Bashdocker-compose down
+
+B. Iniciar a API (.NET 8)
+
+Navegue até o diretório da API:
+
+cd Blog.Api.API
+
+
+Execute:
+
+dotnet run
+
+C. Endereço de Acesso ao Swagger
+
+O Swagger sobe na porta configurada no launchSettings.json ou appsettings.json.
+
+Acesso:
+
+http://localhost:5160/swagger/index.html
+
+🗃 Detalhes Técnicos da Arquitetura
+
+A API utiliza arquitetura limpa em camadas com CQRS via MediatR.
+
+Estrutura:
+
+API: Controladores, configuração, autenticação e Swagger.
+
+Application: Handlers do MediatR, validações, lógica de negócio e interfaces.
+
+Domain: Entidades, regras e invariantes de domínio.
+
+Infrastructure: Repositórios, serviços e persistência via EF Core no PostgreSQL.
+
+Uso do Swagger
+
+O Swagger oferece:
+
+Documentação completa dos endpoints de CRUD e autenticação.
+
+Botão Authorize para inserir o Bearer Token.
+
+Testes de rotas protegidas após fazer login ou registro.
+
+🛑 Parar e Limpar Containers
+
+Para encerrar todos os serviços de forma limpa:
+
+docker-compose down
