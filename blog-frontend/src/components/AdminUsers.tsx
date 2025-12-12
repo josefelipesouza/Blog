@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
-import type { User } from '../types';
+import type { User } from '../types'; // Importe o tipo User atualizado
 import { useAuth } from '../contexts/AuthContext';
 
 export const AdminUsersList: React.FC = () => {
-  const { token, isAuthenticated, user } = useAuth();
+  // Pega o token, isAuthenticated, e o NOVO isAdmin()
+  const { token, isAuthenticated, isAdmin } = useAuth(); 
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -19,7 +20,8 @@ export const AdminUsersList: React.FC = () => {
         throw new Error('Usuário não autenticado');
       }
 
-      if (!user || user.role !== 'Admin') {
+      // 🎯 CORREÇÃO 1: Usar a função isAdmin() do contexto
+      if (!isAdmin()) { 
         throw new Error('Acesso negado. Necessita permissão de Admin.');
       }
 
@@ -32,21 +34,24 @@ export const AdminUsersList: React.FC = () => {
 
       setUsers(response.data);
     } catch (err: any) {
-      setError(
+      // Simplificando o tratamento de erro
+      const errorMessage = 
         err.message === 'Usuário não autenticado'
           ? 'Usuário não autenticado. Faça login.'
           : err.message === 'Acesso negado. Necessita permissão de Admin.'
-          ? 'Acesso negado. Necessita permissão de Admin.'
-          : 'Erro ao carregar usuários.'
-      );
+            ? 'Acesso negado. Necessita permissão de Admin.'
+            : 'Erro ao carregar usuários.';
+            
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
+  // Reexecuta quando token ou autenticação mudar
   useEffect(() => {
     fetchUsers();
-  }, [token, isAuthenticated, user]); // Reexecuta quando token, autenticação ou user mudar
+  }, [token, isAuthenticated, isAdmin]); // Incluir isAdmin na dependência, mesmo que seja uma função memoizada
 
   if (loading) return <p>Carregando usuários...</p>;
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
@@ -59,7 +64,7 @@ export const AdminUsersList: React.FC = () => {
           <tr style={{ backgroundColor: '#f2f2f2' }}>
             <th style={{ border: '1px solid #ddd', padding: '8px' }}>ID</th>
             <th style={{ border: '1px solid #ddd', padding: '8px' }}>Email</th>
-            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Role</th>
+            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Roles</th> {/* Título corrigido */}
           </tr>
         </thead>
         <tbody>
@@ -67,7 +72,10 @@ export const AdminUsersList: React.FC = () => {
             <tr key={u.id}>
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>{u.id}</td>
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>{u.email}</td>
-              <td style={{ border: '1px solid #ddd', padding: '8px' }}>{u.role || '-'}</td>
+              {/* 🎯 CORREÇÃO 2: Acessar a lista u.roles e formatá-la */}
+              <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+                {u.roles?.join(', ') || '-'} 
+              </td>
             </tr>
           ))}
         </tbody>

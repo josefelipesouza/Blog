@@ -10,23 +10,25 @@ export interface Postagem {
   atualizadoEm?: string | null;
 }
 
-// Resposta de Login (AuthController)
+// Estrutura exata da resposta da API no /auth/login
 export interface LoginResponse {
-  token: string;
-  expiration: string;
+    token: string;
+    username: string;
+    email: string;
+    roles: string[]; // <-- IMPORTANTE: Agora é uma lista (como vem do backend)
 }
 
-// Representação do usuário autenticado
+// Estrutura do usuário que armazenamos no estado (User | null)
 export interface User {
-  id: string;
-  email: string;
-  userName: string
-  role: string;     
+    id: string;
+    email: string;
+    userName: string;
+    roles: string[]; // <-- MUDANÇA: Usaremos a lista de roles
 }
 
-// Requisição de cadastro
+// Estrutura para o registro
 export interface RegisterRequest {
-  username: string;
-  email: string;
-  password: string;
+    username: string;
+    email: string;
+    password: string;
 }
