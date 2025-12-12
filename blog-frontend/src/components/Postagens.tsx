@@ -1,14 +1,20 @@
-// src/components/Postagens.tsx - Versão Corrigida Final com Mapeamento de Usuários
+// src/components/Postagens.tsx - Versão Corrigida para Mapear ID -> EMAIL do Autor
 
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import type { Postagem } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 
-// Define o tipo de dado para a postagem (para garantir a tipagem)
+
+// Define o tipo de dado para a postagem (não precisa de alterações no tipo, apenas no map)
 interface PostagemComAutor extends Postagem {
-    // Adicione outros campos necessários se sua API os retornar
-    autorUsername?: string; 
+    // Mantemos a interface simples, pois o email do autor virá do mapeamento
+}
+
+// Interface para o dado de usuário retornado pela API /usuarios
+interface UserAPI {
+    id: string;
+    email: string; // ALTERAÇÃO PRINCIPAL: Assume que a API retorna 'email' em vez de 'userName'
 }
 
 
@@ -17,32 +23,34 @@ export const PostagensList: React.FC = () => {
     const [posts, setPosts] = useState<PostagemComAutor[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    // NOVIDADE: Estado para mapear AutorId -> UserName
+    
+    // CORREÇÃO: Estado para mapear AutorId -> Email do Autor (string)
     const [userMap, setUserMap] = useState<Record<string, string>>({}); 
 
     const [isEditing, setIsEditing] = useState<Postagem | null>(null);
     const [newPost, setNewPost] = useState({ titulo: '', conteudo: '' });
 
-    // --- Estilos de Tema ---
+    // --- Estilos de Tema (permanecem os mesmos) ---
     const CARD_BG = '#333'; 
     const CONTAINER_BG = '#242424'; 
-    const ACCENT_COLOR = '#673ab7'; 
+    const ACCENT_COLOR = '#ffffffff'; 
+    const ACCENT_COLORB = '#673ab7'; 
     const TEXT_COLOR = 'rgba(255, 255, 255, 0.87)'; 
 
-    // NOVIDADE: Função para buscar todos os usuários e criar o mapa
+    // CORREÇÃO: Função para buscar todos os usuários e criar o mapa ID -> EMAIL
     const fetchUsers = async () => {
         try {
-            // ASSUMÇÃO: Endpoint que retorna uma lista de usuários com Id e UserName
-            const response = await api.get<Array<{ id: string; userName: string }>>('/usuarios'); 
+            // ASSUMÇÃO: Endpoint que retorna uma lista de usuários com Id e Email
+            const response = await api.get<UserAPI[]>('/usuarios'); 
             
             const map: Record<string, string> = {};
             response.data.forEach(u => {
-                map[u.id] = u.userName;
+                // Mapeia o ID do usuário para o EMAIL
+                map[u.id] = u.email; 
             });
             setUserMap(map);
         } catch (err) {
-            console.error('Erro ao carregar mapa de usuários.', err);
-            // Em caso de falha, não impede o carregamento dos posts
+            console.error('Erro ao carregar mapa de usuários (emails).', err);
         }
     };
     
@@ -59,7 +67,7 @@ export const PostagensList: React.FC = () => {
     };
 
     useEffect(() => {
-        fetchUsers(); // 1. Carrega o mapa de usuários primeiro
+        fetchUsers(); // 1. Carrega o mapa de IDs para Emails
         fetchPosts(); // 2. Carrega as postagens
     }, []);
 
@@ -95,7 +103,6 @@ export const PostagensList: React.FC = () => {
     };
 
     // --- Funções de Estilo (permanecem as mesmas) ---
-    // ... (inputStyle, buttonStyle, buttonDangerStyle, postCardStyle, formContainerStyle) ...
     const inputStyle: React.CSSProperties = {
         width: '100%',
         padding: '12px',
@@ -109,7 +116,7 @@ export const PostagensList: React.FC = () => {
 
     const buttonStyle: React.CSSProperties = {
         padding: '10px 15px',
-        backgroundColor: ACCENT_COLOR,
+        backgroundColor: ACCENT_COLORB,
         color: 'white',
         border: 'none',
         borderRadius: '6px',
@@ -204,21 +211,21 @@ export const PostagensList: React.FC = () => {
             {posts.map(post => {
                 const isOwner = user?.id === post.autorId;
                 
-                // CORREÇÃO: Usa o userMap para encontrar o UserName.
+                // CORREÇÃO: Usa o userMap para encontrar o Email do Autor.
                 // Se o userMap não estiver carregado ou o ID não for encontrado, usa 'Desconhecido'.
-                const autorUsername = userMap[post.autorId] || 'Desconhecido'; 
+                const autorEmail = userMap[post.autorId] || 'Desconhecido'; 
 
                 return (
                     <div key={post.id} style={postCardStyle}>
                         <h3 style={{ color: ACCENT_COLOR, marginTop: 0 }}>{post.titulo}</h3>
                         
-                        {/* Exibe o nome de usuário do autor com '@' */}
+                        {/* Exibe o email do autor */}
                         <p style={{ 
                             color: ACCENT_COLOR, 
                             fontSize: '0.9rem', 
                             marginBottom: '10px' 
                         }}>
-                            Por: @{autorUsername}
+                           
                         </p>
                         
                         <p>{post.conteudo}</p>

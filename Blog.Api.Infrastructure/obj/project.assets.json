@@ -3988,11 +3988,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\User\\desktop\\dev\\.net\\blog.api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj",
       "projectName": "Blog.Api.Infrastructure",
-      "projectPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj",
+      "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\blog.api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\obj\\",
+      "outputPath": "C:\\Users\\User\\desktop\\dev\\.net\\blog.api\\Blog.Api.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -4007,14 +4007,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\Blog.Api.Application.csproj": {
-              "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Application\\Blog.Api.Application.csproj"
+            "C:\\Users\\User\\desktop\\dev\\.net\\blog.api\\Blog.Api.Application\\Blog.Api.Application.csproj": {
+              "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\blog.api\\Blog.Api.Application\\Blog.Api.Application.csproj"
             },
-            "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj": {
-              "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj"
+            "C:\\Users\\User\\desktop\\dev\\.net\\blog.api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj": {
+              "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\blog.api\\Blog.Api.Authentication\\Blog.Api.Authentication.csproj"
             },
-            "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj": {
-              "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Domain\\Blog.Api.Domain.csproj"
+            "C:\\Users\\User\\desktop\\dev\\.net\\blog.api\\Blog.Api.Domain\\Blog.Api.Domain.csproj": {
+              "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\blog.api\\Blog.Api.Domain\\Blog.Api.Domain.csproj"
             }
           }
         }

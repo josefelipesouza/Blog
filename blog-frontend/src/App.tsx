@@ -9,8 +9,7 @@ import { AdminUsersList } from './components/AdminUsers';
 /* Header component - usa classes do CSS global */
 const Header: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuth();
-  // ALTERAÇÃO 1: Corrige o email do admin para o especificado
-  const isAdmin = user?.email === "Admin@gmail.com.br"; 
+
 
   return (
     <header className="app-header">
@@ -20,8 +19,7 @@ const Header: React.FC = () => {
           <Link to="/" style={{ color: '#fff', marginRight: 20 }}>Postagens (Home)</Link>
         )}
         
-        {/* ALTERAÇÃO 3: Link Admin/Usuários só aparece se for admin (e logado) */}
-        {isAdmin && <Link to="/admin" style={{ color: 'yellow' }}>Usuários (Admin)</Link>}
+
       </div>
 
       <div>
