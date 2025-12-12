@@ -826,12 +826,14 @@
       },
       "Blog.Api.Application/1.0.0": {
         "dependencies": {
+          "Blog.Api.Authentication": "1.0.0",
           "Blog.Api.Domain": "1.0.0",
           "ErrorOr": "2.0.1",
           "FluentValidation.DependencyInjectionExtensions": "12.1.1",
           "MediatR": "11.1.0",
           "MediatR.Extensions.Microsoft.DependencyInjection": "11.1.0",
           "Microsoft.AspNetCore.Http.Abstractions": "2.3.0",
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.0",
           "System.Security.Claims": "4.3.0"
         },
         "runtime": {

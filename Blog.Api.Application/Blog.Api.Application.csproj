@@ -2,11 +2,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Blog.Api.Domain\Blog.Api.Domain.csproj" />
+    <ProjectReference Include="..\Blog.Api.Authentication\Blog.Api.Authentication.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="ErrorOr" Version="2.0.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />

@@ -20,6 +20,9 @@ using Blog.Api.Application.Handlers.Post.Cadastrar;
 using Blog.Api.Application.Handlers.Post.Editar;
 using Blog.Api.Application.Handlers.Post.Excluir;
 using Blog.Api.Application.Handlers.Post.Listar;
+using Blog.Api.Application.Handlers.User.Listar;
+using Blog.Api.Application.Handlers.User.Editar;
+using Blog.Api.Application.Handlers.User.Excluir;
 
 // Usings específicos de Injeção de Dependência
 using Blog.Api.Application.Interfaces.Repositories;
@@ -127,7 +130,10 @@ builder.Services.AddMediatR(
     typeof(CadastrarPostagemHandler).Assembly,
     typeof(EditarPostagemHandler).Assembly,
     typeof(ExcluirPostagemHandler).Assembly,
-    typeof(ListarPostagensHandler).Assembly
+    typeof(ListarPostagensHandler).Assembly,
+    typeof(ListarUsuariosHandler).Assembly,
+    typeof(EditarUsuarioHandler).Assembly,
+    typeof(ExcluirUsuarioHandler).Assembly
 );
 
 // 7. Injeção de Dependência (Services e Repositórios)

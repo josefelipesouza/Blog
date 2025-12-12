@@ -1334,12 +1334,14 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "Blog.Api.Authentication": "1.0.0",
           "Blog.Api.Domain": "1.0.0",
           "ErrorOr": "2.0.1",
           "FluentValidation.DependencyInjectionExtensions": "12.1.1",
           "MediatR": "11.1.0",
           "MediatR.Extensions.Microsoft.DependencyInjection": "11.1.0",
           "Microsoft.AspNetCore.Http.Abstractions": "2.3.0",
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.0",
           "System.Security.Claims": "4.3.0"
         },
         "compile": {
@@ -3986,11 +3988,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj",
       "projectName": "Blog.Api.Infrastructure",
-      "projectPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj",
+      "projectPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\Blog.Api.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\obj\\",
+      "outputPath": "C:\\Users\\User\\Desktop\\dev\\.net\\Blog.Api\\Blog.Api.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
