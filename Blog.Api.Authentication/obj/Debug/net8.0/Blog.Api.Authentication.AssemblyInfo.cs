@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Blog.Api.Authentication")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+14a451b3b75882800d5f5d8e22c9e25b77bbd409")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7c2ed6178184334ee75db405de0f2d23620adbb9")]
 [assembly: System.Reflection.AssemblyProductAttribute("Blog.Api.Authentication")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Blog.Api.Authentication")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

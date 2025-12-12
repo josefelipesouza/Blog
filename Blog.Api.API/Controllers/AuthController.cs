@@ -62,58 +62,19 @@ namespace Blog.Api.API.Controllers
 
         
         [HttpGet("users")]
-        [Authorize(Roles = "Admin")] // Protege o endpoint
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ListarUsuarios()
         {
             var result = await _mediator.Send(new ListarUsuariosRequest());
 
             return result.Match(
                 sucesso => Ok(sucesso),
-                // Se falhar, pode ser um erro de permissão (403 Forbidden) ou outro erro
+              
                 erros => Problem(statusCode: 400, detail: erros.First().Description)
             );
         }
 
-        // Endpoint temporário para debug - verificar roles do usuário
-        [HttpGet("debug/roles")]
-        public async Task<IActionResult> DebugRoles([FromQuery] string email)
-        {
-            if (string.IsNullOrEmpty(email))
-                return BadRequest("Email é obrigatório");
-
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user == null)
-                return NotFound("Usuário não encontrado");
-
-            var roles = await _userManager.GetRolesAsync(user);
-            return Ok(new { Email = email, Roles = roles, RoleCount = roles.Count });
-        }
-
-        // Endpoint temporário para atribuir role Admin ao usuário
-        [HttpPost("debug/assign-admin")]
-        public async Task<IActionResult> AssignAdminRole([FromQuery] string email)
-        {
-            if (string.IsNullOrEmpty(email))
-                return BadRequest("Email é obrigatório");
-
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user == null)
-                return NotFound("Usuário não encontrado");
-
-            var roles = await _userManager.GetRolesAsync(user);
-            if (!roles.Contains("Admin"))
-            {
-                var result = await _userManager.AddToRoleAsync(user, "Admin");
-                if (result.Succeeded)
-                {
-                    var updatedRoles = await _userManager.GetRolesAsync(user);
-                    return Ok(new { Message = "Role Admin atribuída com sucesso", Email = email, Roles = updatedRoles });
-                }
-                return BadRequest(new { Errors = result.Errors.Select(e => e.Description) });
-            }
-
-            return Ok(new { Message = "Usuário já possui role Admin", Email = email, Roles = roles });
-        }
+   
         
         
 
